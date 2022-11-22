@@ -1,26 +1,34 @@
 package com.sendel.pastebox.controller;
 
 import com.sendel.pastebox.api.request.PasteboxRequest;
+import com.sendel.pastebox.api.response.PasteboxResponse;
+import com.sendel.pastebox.api.response.PasteboxUrlResponse;
+import com.sendel.pastebox.service.PasteboxService;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.Collections;
 
 @RestController
+@AllArgsConstructor
 public class PasteboxController {
 
+   private final PasteboxService pasteboxService;
+
     @GetMapping("/")
-    public Collection<String> getPublicPasteList(){
-        return Collections.emptyList();
+    public Collection<PasteboxResponse> getPublicPasteList() {
+        return pasteboxService.getFirstPublicPastebox();
     }
 
     @GetMapping("/{hash}")
-    public String getByHash(@PathVariable String hash){
-        return hash;
+    public PasteboxResponse getByHash(@PathVariable String hash) {
+        return pasteboxService.getByHash(hash);
     }
 
     @PostMapping("/")
-    public String add(@RequestBody PasteboxRequest pasteBoxRequest){
-        return pasteBoxRequest.getData();
+    public PasteboxUrlResponse add(@RequestBody PasteboxRequest request) {
+        return pasteboxService.create(request);
     }
 }

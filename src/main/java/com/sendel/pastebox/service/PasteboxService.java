@@ -8,7 +8,7 @@ import com.sendel.pastebox.api.response.PasteboxUrlResponse;
 import java.util.List;
 
 public interface PasteboxService {
-    PasteboxResponse gerByHash(String hash);
-    List<PasteboxResponse> getFirstPublicPastebox(int amount);
+    PasteboxResponse getByHash(String hash);
+    List<PasteboxResponse> getFirstPublicPastebox();
     PasteboxUrlResponse create (PasteboxRequest request);
 }
