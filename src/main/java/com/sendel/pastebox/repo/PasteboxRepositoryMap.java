@@ -8,12 +8,13 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Repository
 public class PasteboxRepositoryMap implements PasteboxRepository {
 
-    private final Map<String, PasteboxEntity> vault = new HashMap<>();
+    private final Map<String, PasteboxEntity> vault = new ConcurrentHashMap<>();
 
     @Override
     public PasteboxEntity getHash(String hash) {

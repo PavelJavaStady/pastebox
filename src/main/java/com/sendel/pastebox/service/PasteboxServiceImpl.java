@@ -26,9 +26,10 @@ import java.util.stream.Collectors;
 @ConfigurationProperties(prefix = "app")
 public class PasteboxServiceImpl implements PasteboxService {
 
-    private String host ;
-    private int publiclistize ;
-@Autowired
+    private String host;
+    private int publiclistize;
+
+    @Autowired
     private PasteboxRepository pasteboxRepository;
 
     private AtomicInteger idGenerator = new AtomicInteger(0);
@@ -41,7 +42,13 @@ public class PasteboxServiceImpl implements PasteboxService {
 
     @Override
     public List<PasteboxResponse> getFirstPublicPastebox() {
-        return null; //pasteboxRepository.getListOfPublicAndAllive(publiclistSize);
+
+        List<PasteboxEntity> list = pasteboxRepository.getListOfPublicAndAllive(10);
+
+        return list.stream().map(pasteboxEntity ->
+                        new PasteboxResponse(pasteboxEntity.getData(), pasteboxEntity.isPublic()))
+                .collect(Collectors.toList());
+
     }
 
     @Override
@@ -55,7 +62,7 @@ public class PasteboxServiceImpl implements PasteboxService {
         pasteboxEntity.setLifetime(LocalDateTime.now().plusSeconds(request.getExpirationTimeSeconds()));
         pasteboxRepository.add(pasteboxEntity);
 
-       return new PasteboxUrlResponse(host + "/" + pasteboxEntity.getHash());
+        return new PasteboxUrlResponse(host + "/" + pasteboxEntity.getHash());
     }
 
     private int generateId() {
